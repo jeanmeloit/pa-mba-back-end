@@ -10,8 +10,10 @@ router.get("/", async (req, res) => {
   await collectionRef
     .get()
     .then((querySnapshot) => {
-      const items = querySnapshot.docs.map((doc) => doc.data());
-      res.status(200).json(JSON.stringify(items));
+      const items = querySnapshot.docs.map((doc) => {
+        return { uuid: doc.id, ...doc.data() };
+      });
+      res.status(200).json(items);
     })
     .catch(() => res.sendStatus(500));
 });
@@ -28,7 +30,7 @@ router.get("/:id", async (req, res) => {
     return res.sendStatus(400);
   }
 
-  res.status(200).send(doc.data());
+  res.status(200).send({ uuid: doc.id, ...doc.data() });
 });
 
 router.post("/", async (req, res) => {

@@ -5,7 +5,7 @@ const port = process.env.PORT ?? 3000;
 const allowedOrigins = ["http://localhost:3570", "http://panther-checkin-control.web.app"];
 const personRoutes = require("../routes/person-route");
 
-app.use(cors({ origin: allowedOrigins }));
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 
 app.use(express.json());
 
