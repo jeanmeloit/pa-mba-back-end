@@ -5,7 +5,7 @@ const port = process.env.PORT ?? 3000;
 
 const personRoutes = require("../routes/person-route");
 
-app.use(cors({ credentials: true }));
+app.use(cors({ credentials: false }));
 
 app.use(express.json());
 
