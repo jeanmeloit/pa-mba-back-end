@@ -5,12 +5,7 @@ const port = process.env.PORT ?? 3000;
 
 const personRoutes = require("../routes/person-route");
 
-app.use(
-  cors({
-    origin: "*",
-    optionsSuccessStatus: 200, // Algumas versões do IE11 não retornam 204
-  })
-);
+app.use(cors({ credentials: true }));
 
 app.use(express.json());
 
