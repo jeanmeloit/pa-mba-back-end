@@ -11,7 +11,7 @@ router.get("/", async (req, res) => {
     .get()
     .then((querySnapshot) => {
       const items = querySnapshot.docs.map((doc) => doc.data());
-      res.status(200).json(items);
+      res.status(200).json(JSON.stringify(items));
     })
     .catch(() => res.sendStatus(500));
 });
