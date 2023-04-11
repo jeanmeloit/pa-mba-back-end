@@ -10,36 +10,34 @@ router.get("/", async (req, res) => {
   await collectionRef
     .get()
     .then((querySnapshot) => {
-      const items = querySnapshot.docs.map((doc) => {
-        return { uuid: doc.id, ...doc.data() };
-      });
+      const items = querySnapshot.docs.map((doc) => doc.data());
       res.status(200).json(items);
     })
     .catch(() => res.sendStatus(500));
 });
 
-router.get("/:id", async (req, res) => {
-  const { id } = req.params;
-  if (!id) {
+router.get("/:uuid", async (req, res) => {
+  const { uuid } = req.params;
+  if (!uuid) {
     return res.sendStatus(404);
   }
 
-  const doc = await collectionRef.doc(id).get();
+  const doc = await collectionRef.doc(uuid).get();
 
   if (!doc.exists) {
     return res.sendStatus(400);
   }
 
-  res.status(200).send({ uuid: doc.id, ...doc.data() });
+  res.status(200).send(doc.data());
 });
 
 router.post("/", async (req, res) => {
-  const id = `${uuidPrefix}-${v4()}`;
+  const uuid = `${uuidPrefix}-${v4()}`;
   await collectionRef
-    .doc(id)
+    .doc(uuid)
     .set(
       {
-        id: id,
+        uuid,
         ...req.body,
       },
       { merge: true }
@@ -53,14 +51,14 @@ router.post("/", async (req, res) => {
     .catch(() => res.sendStatus(500));
 });
 
-router.put("/:id", async (req, res) => {
-  const { id } = req.params;
+router.put("/:uuid", async (req, res) => {
+  const { uuid } = req.params;
 
   await collectionRef
-    .doc(id)
+    .doc(uuid)
     .set(
       {
-        id,
+        uuid,
         ...req.body,
       },
       { merge: true }
@@ -68,16 +66,20 @@ router.put("/:id", async (req, res) => {
     .then(() =>
       res.status(200).json({
         message: "Person updated successfully",
+        updatedPerson: {
+          uuid,
+          ...req.body,
+        },
       })
     )
     .catch(() => res.sendStatus(500));
 });
 
-router.patch("/:id", async (req, res) => {
-  const { id } = req.params;
+router.patch("/:uuid", async (req, res) => {
+  const { uuid } = req.params;
 
   await collectionRef
-    .doc(id)
+    .doc(uuid)
     .update(
       {
         ...req.body,
@@ -92,15 +94,19 @@ router.patch("/:id", async (req, res) => {
     .catch(() => res.sendStatus(500));
 });
 
-router.delete("/:id", async (req, res) => {
-  const { id } = req.params;
+router.delete("/:uuid", async (req, res) => {
+  const { uuid } = req.params;
 
   await collectionRef
-    .doc(id)
+    .doc(uuid)
     .delete()
     .then(() =>
       res.status(200).json({
         message: "Person deleted successfully",
+        deletedPerson: {
+          uuid,
+          ...req.body,
+        },
       })
     )
     .catch(() => res.sendStatus(500));
