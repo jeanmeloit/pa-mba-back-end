@@ -1,11 +1,16 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
-const port = process.env.PORT ?? 4000;
+const port = process.env.PORT ?? 3000;
 
 const personRoutes = require("../routes/person-route");
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+    optionsSuccessStatus: 200, // Algumas versões do IE11 não retornam 204
+  })
+);
 
 app.use(express.json());
 
