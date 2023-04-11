@@ -2,32 +2,31 @@
 GET http://localhost:3000/person
 
 ### GET BY ID TEST
-GET http://localhost:3000/person/PRS-700fee02-a51a-4bf7-b902-0f78653396db
+GET http://localhost:3000/person/PRS-3eeb6c9c-0ae0-4c74-8ce3-5a3cb148795f
 
 ### POST TEST
 POST http://localhost:3000/person
 Content-Type: application/json
 
 {
-    "name": "test",
+    "name": "test2",
     "mail": "test",
     "phone": "test",
     "age": "test"
 }
-
 ### PUT TEST
-PUT  http://localhost:3000/person/PRS-700fee02-a51a-4bf7-b902-0f78653396db
+PUT  http://localhost:3000/person/PRS-3eeb6c9c-0ae0-4c74-8ce3-5a3cb148795f
 Content-Type: application/json
 
 {
-    "name": "test3",
+    "name": "test4",
     "mail": "test2",
     "phone": "test2",
     "age": "test2"
 }
 
 ### PATCH TEST
-PATCH http://localhost:3000/person/PRS-700fee02-a51a-4bf7-b902-0f78653396db
+PATCH http://localhost:3000/person/PRS-3eeb6c9c-0ae0-4c74-8ce3-5a3cb148795f
 Content-Type: application/json
 
 {
@@ -36,5 +35,5 @@ Content-Type: application/json
 }
 
 ### DELETE TEST
-DELETE http://localhost:3000/person/PRS-700fee02-a51a-4bf7-b902-0f78653396db
+DELETE http://localhost:3000/person/PRS-3eeb6c9c-0ae0-4c74-8ce3-5a3cb148795f
 Content-Type: application/json

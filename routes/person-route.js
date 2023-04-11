@@ -1,24 +1,22 @@
 const express = require("express");
+const router = express.Router();
+
 const { v4 } = require("uuid");
 const { db } = require("../firebase/firebase.js");
-const { app } = require("firebase-admin");
-
-const router = express.Router();
 const collectionRef = db.collection("person");
 const uuidPrefix = "PRS";
 
-app.get("/person", async (req, res) => {
-  const ref = collectionRef.doc();
-  const doc = await ref.get();
-
-  if (!doc.exists) {
-    return res.sendStatus(400);
-  }
-
-  res.status(200).send(doc.data());
+router.get("/", async (req, res) => {
+  await collectionRef
+    .get()
+    .then((querySnapshot) => {
+      const items = querySnapshot.docs.map((doc) => doc.data());
+      res.status(200).json(items);
+    })
+    .catch(() => res.sendStatus(500));
 });
 
-router.get("/person/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
   const { id } = req.params;
   if (!id) {
     return res.sendStatus(404);
@@ -33,9 +31,9 @@ router.get("/person/:id", async (req, res) => {
   res.status(200).send(doc.data());
 });
 
-router.post("/person", async (req, res) => {
+router.post("/", async (req, res) => {
   const id = `${uuidPrefix}-${v4()}`;
-  const action = await collectionRef
+  await collectionRef
     .doc(id)
     .set(
       {
@@ -45,15 +43,18 @@ router.post("/person", async (req, res) => {
       { merge: true }
     )
     .then(() => {
-      res.status(200).send();
+      res.status(200).json({
+        message: "Person created successfully",
+        createdPerson: req.body,
+      });
     })
     .catch(() => res.sendStatus(500));
 });
 
-router.put("/person/:id", async (req, res) => {
+router.put("/:id", async (req, res) => {
   const { id } = req.params;
 
-  const action = await collectionRef
+  await collectionRef
     .doc(id)
     .set(
       {
@@ -62,14 +63,18 @@ router.put("/person/:id", async (req, res) => {
       },
       { merge: true }
     )
-    .then(() => res.status(200).send())
+    .then(() =>
+      res.status(200).json({
+        message: "Person updated successfully",
+      })
+    )
     .catch(() => res.sendStatus(500));
 });
 
-router.patch("/person/:id", async (req, res) => {
+router.patch("/:id", async (req, res) => {
   const { id } = req.params;
 
-  const action = await collectionRef
+  await collectionRef
     .doc(id)
     .update(
       {
@@ -77,17 +82,25 @@ router.patch("/person/:id", async (req, res) => {
       },
       { merge: true }
     )
-    .then(() => res.status(200).send())
+    .then(() =>
+      res.status(200).json({
+        message: "Person updated successfully",
+      })
+    )
     .catch(() => res.sendStatus(500));
 });
 
-router.delete("/person/:id", async (req, res) => {
+router.delete("/:id", async (req, res) => {
   const { id } = req.params;
 
-  const action = await collectionRef
+  await collectionRef
     .doc(id)
     .delete()
-    .then(() => res.status(200).send())
+    .then(() =>
+      res.status(200).json({
+        message: "Person deleted successfully",
+      })
+    )
     .catch(() => res.sendStatus(500));
 });
 
