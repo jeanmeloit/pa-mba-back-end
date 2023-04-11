@@ -1,0 +1,29 @@
+{
+  "name": "pa-mba-back-end",
+  "version": "1.0.0",
+  "description": "NodeJS backend for a MBA project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "cd server && nodemon server.js",
+    "serve": "cd server && node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeanmeloit/pa-mba-back-end.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jeanmeloit/pa-mba-back-end/issues"
+  },
+  "homepage": "https://github.com/jeanmeloit/pa-mba-back-end#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "firebase-admin": "^11.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}

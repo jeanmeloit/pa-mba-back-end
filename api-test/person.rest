@@ -1,0 +1,40 @@
+### GET TEST
+GET http://localhost:3000/person
+
+### GET BY ID TEST
+GET http://localhost:3000/person/PRS-700fee02-a51a-4bf7-b902-0f78653396db
+
+### POST TEST
+POST http://localhost:3000/person
+Content-Type: application/json
+
+{
+    "name": "test",
+    "mail": "test",
+    "phone": "test",
+    "age": "test"
+}
+
+### PUT TEST
+PUT  http://localhost:3000/person/PRS-700fee02-a51a-4bf7-b902-0f78653396db
+Content-Type: application/json
+
+{
+    "name": "test3",
+    "mail": "test2",
+    "phone": "test2",
+    "age": "test2"
+}
+
+### PATCH TEST
+PATCH http://localhost:3000/person/PRS-700fee02-a51a-4bf7-b902-0f78653396db
+Content-Type: application/json
+
+{
+    "name": "test3",
+    "mail": "test3"
+}
+
+### DELETE TEST
+DELETE http://localhost:3000/person/PRS-700fee02-a51a-4bf7-b902-0f78653396db
+Content-Type: application/json
