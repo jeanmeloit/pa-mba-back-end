@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const port = process.env.PORT ?? 3000;
-const allowedOrigins = ["http://localhost:3570", "http://panther-checkin-control.web.app"];
+const allowedOrigins = ["http://localhost:3570", "https://panther-checkin-control.web.app"];
 const personRoutes = require("../routes/person-route");
 
 app.use(cors({ origin: allowedOrigins, credentials: true }));
