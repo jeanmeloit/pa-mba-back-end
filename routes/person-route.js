@@ -39,6 +39,8 @@ router.post("/", async (req, res) => {
       {
         uuid,
         ...req.body,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       },
       { merge: true }
     )
@@ -60,6 +62,7 @@ router.put("/:uuid", async (req, res) => {
       {
         uuid,
         ...req.body,
+        updatedAt: new Date().toISOString(),
       },
       { merge: true }
     )
@@ -83,6 +86,7 @@ router.patch("/:uuid", async (req, res) => {
     .update(
       {
         ...req.body,
+        updatedAt: new Date().toISOString(),
       },
       { merge: true }
     )

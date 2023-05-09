@@ -5,15 +5,15 @@ GET http://localhost:3000/person
 GET http://localhost:3000/person/PRS-3eeb6c9c-0ae0-4c74-8ce3-5a3cb148795f
 
 ### POST TEST
-POST http://localhost:3000/person
+POST http://localhost:3000/checkin
 Content-Type: application/json
 
 {
-    "name": "test2",
-    "mail": "test",
-    "phone": "test",
-    "age": "test"
+  "classUuid": "CLS-29ecb44c-4992-476b-97b0-b7b32eda4aaf",
+  "date": "2023-05-08",
+  "userUuid": "user/USR-f2efee7a-640d-481a-abd5-ecddf486e6c8",
 }
+
 ### PUT TEST
 PUT  http://localhost:3000/person/PRS-3eeb6c9c-0ae0-4c74-8ce3-5a3cb148795f
 Content-Type: application/json

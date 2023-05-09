@@ -1,14 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const { db } = require("../firebase/firebase.js");
-const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const collectionRef = db.collection("person");
+const jwt = require("jsonwebtoken");
+
+const { v4 } = require("uuid");
+const { db } = require("../firebase/firebase.js");
+const collectionRef = db.collection("user");
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   collectionRef
-    .where("mail", "==", email)
+    .where("email", "==", email)
     .get()
     .then((querySnapshot) => {
       if (querySnapshot.empty) {
@@ -16,6 +18,8 @@ router.post("/login", async (req, res) => {
         throw new Error("User not found");
       }
       const user = querySnapshot.docs[0];
+
+      // const passwordBytes = Buffer.from(password, "base64");
 
       return compare(user.data(), password, res);
     });
@@ -25,7 +29,6 @@ const compare = async (user, password, res) => {
   bcrypt
     .compare(password, user.password)
     .then((passwordMatches) => {
-      console.log(passwordMatches);
       if (!passwordMatches) {
         res.status(403).json({ message: "Invalid credentials" });
         throw new Error("Invalid credentials");
@@ -53,25 +56,49 @@ const compare = async (user, password, res) => {
     });
 };
 
-router.post("/signup", (req, res) => {
-  const user = req.body;
+router.post("/signup", async (req, res) => {
+  try {
+    const userUuid = `USR-${v4()}`;
+    const personUuid = `PRS-${v4()}`;
 
-  bcrypt.hash(user.password, 10, (err, hash) => {
-    if (err) {
-      res.status(500).json({ message: "Internal server error" });
-    } else {
-      user.password = hash;
-      db.collection("users")
-        .doc(user.email)
-        .set(user)
-        .then(() => {
-          res.status(200).json({ message: "User created successfully!" });
-        })
-        .catch((error) => {
-          res.status(500).json({ message: "Internal server error" });
-        });
-    }
-  });
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const canAccessTill = new Date();
+    canAccessTill.setDate(canAccessTill.getDate() + 2);
+
+    const user = {
+      uuid: userUuid,
+      ...req.body,
+      password: hashedPassword,
+      accessLevel: "GUEST",
+      canAccessTill: canAccessTill.toISOString(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      personUuid: `person/${personUuid}`,
+    };
+
+    await collectionRef.doc(userUuid).set(user, { merge: true });
+
+    const person = {
+      uuid: personUuid,
+      name: req.body.name,
+      phone: req.body.phone,
+      age: req.body.age,
+      email: req.body.email,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      userUuid: `user/${userUuid}`,
+    };
+
+    await db.collection("person").doc(personUuid).set(person, { merge: true });
+
+    res.status(200).json({
+      message: "User created successfully",
+      createdUser: user,
+    });
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
 });
 
 module.exports = router;
